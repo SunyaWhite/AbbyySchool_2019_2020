@@ -51,6 +51,10 @@ class DisplayNoteFragment : Fragment() {
         return view
     }
 
+    /**
+     * Интерфейс, реализуемый активити.
+     * Используется для получения ифнормации об отображаемом Note
+     */
     interface InteractWithDisplayNoteFragment{
 
         fun getNoteById(id : Long) : Note
