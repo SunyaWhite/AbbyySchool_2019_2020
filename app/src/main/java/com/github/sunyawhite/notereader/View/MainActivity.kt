@@ -1,7 +1,8 @@
-package com.github.sunyawhite.notereader
+package com.github.sunyawhite.notereader.View
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.github.sunyawhite.notereader.R
 
 //src/main/java/com/github/sunyawhite/notereader/Model/
 
