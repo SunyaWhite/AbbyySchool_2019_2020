@@ -77,7 +77,7 @@ class NoteFragment : Fragment() {
 
         fun getListOfItems() : List<Note>
 
-        fun onListClick(item: Note)
+        fun onListClick(id : Long)
     }
 
     companion object {

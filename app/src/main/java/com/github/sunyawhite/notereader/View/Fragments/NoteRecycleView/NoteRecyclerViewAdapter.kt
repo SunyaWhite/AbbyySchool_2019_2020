@@ -24,7 +24,7 @@ class NoteRecyclerViewAdapter(
             val item = v.tag as Note
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onListClick(item)
+            mListener?.onListClick(item.Id)
         }
     }
 
