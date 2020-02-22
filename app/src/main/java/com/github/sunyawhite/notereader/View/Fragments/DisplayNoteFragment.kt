@@ -41,20 +41,23 @@ class DisplayNoteFragment : Fragment() {
 
 
     companion object {
+        // Tag for the fragment
+        const val TAG = "LIST_NOTE"
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param text Parameter 1.
+         * @param image Parameter 2.
          * @return A new instance of fragment DisplayNoteFragment.
          */
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(text: String, image: Int) =
             DisplayNoteFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM1, text)
+                    putInt(ARG_PARAM2, image)
                 }
             }
     }
