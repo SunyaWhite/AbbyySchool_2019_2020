@@ -23,16 +23,46 @@ class NoteRepository (val context : Context) : INoteRepository {
         Realm.init(context)
         config = RealmConfig.provideDefaultConfiguration()
         realm = Realm.getInstance(config)
-        //generateSampleData()
+        generateSampleData()
     }
 
-    override fun getAllNotes(): List<NoteRealm>? =
-        realm.where<NoteRealm>().findAll()
+    override fun getAllNotes(): List<Note>? =
+        realm.where<NoteRealm>()
+            .findAll()
+            .map { noteRealm -> Note.toNote(noteRealm) } // конвертируем данные
 
-    override fun getNoteById(id: Long): NoteRealm? =
-        realm.where<NoteRealm>().equalTo("Id", id).findFirst()
+    override fun getNoteById(id: Long): Note? =
+        Note.toNote(
+            realm.where<NoteRealm>().equalTo("Id", id)
+            .findFirst()
+        )
 
-    override fun addNewNote(note: NoteRealm): Boolean {
+    override fun addNewNote(note: Note): Boolean {
+        return this.addNewNote(NoteRealm.toNoteRealm(note))
+    }
+
+    override fun deleteNote(id: Long): Boolean {
+        return try{
+            realm.executeTransaction { realm ->
+                // Получаем данные из базы
+                var note = realm.where<NoteRealm>().equalTo("Id", id).findFirst()
+                    ?: throw RealmException("Unable to find note with a such id")
+                // производим удаление данных
+                note.deleteFromRealm()
+            }
+            true
+        }
+        catch (ex : Exception){
+            Log.e("REALM EXCEPTION : ", ex.message)
+            false
+        }
+    }
+
+    override fun containsNoteById(id: Long): Boolean =
+        realm.where<NoteRealm>().equalTo("Id", id).count() > 0
+
+    // Метод для добавления данных в базу данных
+    private fun addNewNote(note : NoteRealm) : Boolean{
         return try {
             realm.executeTransaction { realm ->
                 realm.copyToRealm(note)
@@ -44,25 +74,6 @@ class NoteRepository (val context : Context) : INoteRepository {
             Log.e("REALM EXCEPTION : ", ex.message)
             false
         }
-    }
-
-    override fun deleteNote(id: Long): Boolean {
-        return try{
-            realm.executeTransaction { realm ->
-                var note = realm.where<NoteRealm>().equalTo("Id", id).findFirst()
-                    ?: throw RealmException("Unable to find note with a such id")
-                note.deleteFromRealm()
-            }
-            true
-        }
-        catch (ex : Exception){
-            Log.e("REALM EXCEPTION : ", ex.message)
-            false
-        }
-    }
-
-    override fun containsNoteById(id: Long): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun generateSampleData() {
