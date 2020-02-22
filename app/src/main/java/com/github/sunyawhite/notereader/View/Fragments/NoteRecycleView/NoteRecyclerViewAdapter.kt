@@ -1,5 +1,3 @@
-package com.github.sunyawhite.notereader.View
-
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +5,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
-
-import kotlinx.android.synthetic.main.fragment_note.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the

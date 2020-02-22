@@ -1,5 +1,3 @@
-package com.github.sunyawhite.notereader.View
-
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -47,7 +45,8 @@ class NoteFragment : Fragment() {
                 adapter = listener?.getListOfItems()?.let {
                     NoteRecyclerViewAdapter(
                         it,
-                        listener)
+                        listener
+                    )
                 }
             }
         }
