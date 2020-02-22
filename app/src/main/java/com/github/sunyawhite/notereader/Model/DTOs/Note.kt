@@ -1,3 +1,5 @@
+package com.github.sunyawhite.notereader.Model
+
 import java.util.*
 
 // Класс. Транспортная сущность. Используется для отображения информации в приложении

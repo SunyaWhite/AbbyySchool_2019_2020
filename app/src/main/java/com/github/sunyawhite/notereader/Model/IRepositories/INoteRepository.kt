@@ -1,3 +1,5 @@
+package com.github.sunyawhite.notereader.Model
+
 interface INoteRepository {
 
     fun getAllNotes() : List<Note>?

@@ -1,7 +1,6 @@
 package com.github.sunyawhite.notereader.Model
 
 import io.realm.annotations.RealmModule
-import NoteRealm
 import io.realm.RealmConfiguration
 
 @RealmModule(classes = [NoteRealm::class])

@@ -1,6 +1,7 @@
+package com.github.sunyawhite.notereader.Model
+
 import android.content.Context
 import android.util.Log
-import com.github.sunyawhite.notereader.Model.RealmConfig
 import com.github.sunyawhite.notereader.R
 import io.realm.Realm
 import io.realm.RealmConfiguration

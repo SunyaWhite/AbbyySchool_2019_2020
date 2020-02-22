@@ -1,3 +1,5 @@
+package com.github.sunyawhite.notereader.Model
+
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
