@@ -1,8 +1,12 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 29
@@ -23,7 +27,7 @@ android {
     }
     sourceSets {
         main {
-            java.srcDirs = ['src/main/java', 'src/main/java/com/github/sunyawhite/notereader/Models', 'src/main/java/com/github/sunyawhite/notereader/Model/Entities', 'src/main/java/com/github/sunyawhite/notereader/Model/IRepositories', 'src/main/java/com/github/sunyawhite/notereader/Model/Repositories']
+            java.srcDirs = ['src/main/java', 'src/main/java/com/github/sunyawhite/notereader/Models', 'src/main/java/com/github/sunyawhite/notereader/Model/Entities', 'src/main/java/com/github/sunyawhite/notereader/Model/IRepositories', 'src/main/java/com/github/sunyawhite/notereader/Model/Repositories', '/src/main/java/com/github/sunyawhite/notereader/Model/DTOs', 'src/main/java/com/github/sunyawhite/notereader/Model/DTOs']
         }
     }
 }
