@@ -4,7 +4,7 @@ import io.realm.annotations.RealmClass
 import java.util.*
 
 @RealmClass
-open class Note (
+open class NoteRealm (
     @PrimaryKey
     var Id : Long = 0,
     var Date : Date = Date(),

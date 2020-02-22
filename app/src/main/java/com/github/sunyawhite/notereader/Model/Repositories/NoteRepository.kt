@@ -1,9 +1,13 @@
 import android.content.Context
+import android.util.Log
 import com.github.sunyawhite.notereader.Model.RealmConfig
 import com.github.sunyawhite.notereader.R
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.exceptions.RealmException
+import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
+import java.lang.Exception
 import java.util.*
 import kotlin.random.Random
 
@@ -22,28 +26,39 @@ class NoteRepository (val context : Context) : INoteRepository {
         //generateSampleData()
     }
 
-    override fun getSingleNote(predicate: (note: Note) -> Boolean): Note {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getAllNotes(): List<NoteRealm>? =
+        realm.where<NoteRealm>().findAll()
 
-    override fun getNotes(predicate: (note: Note) -> Boolean): List<Note> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getNoteById(id: Long): NoteRealm? =
+        realm.where<NoteRealm>().equalTo("Id", id).findFirst()
 
-    override fun getAllNotes(): List<Note> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getNoteById(id: Long): Note {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun addNewNote(note: Note): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addNewNote(note: NoteRealm): Boolean {
+        return try {
+            realm.executeTransaction { realm ->
+                realm.copyToRealm(note)
+                    ?: throw RealmException("Unable to add note to the database. Note $note")
+            }
+            true
+        }
+        catch(ex : Exception) {
+            Log.e("REALM EXCEPTION : ", ex.message)
+            false
+        }
     }
 
     override fun deleteNote(id: Long): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return try{
+            realm.executeTransaction { realm ->
+                var note = realm.where<NoteRealm>().equalTo("Id", id).findFirst()
+                    ?: throw RealmException("Unable to find note with a such id")
+                note.deleteFromRealm()
+            }
+            true
+        }
+        catch (ex : Exception){
+            Log.e("REALM EXCEPTION : ", ex.message)
+            false
+        }
     }
 
     override fun containsNoteById(id: Long): Boolean {
@@ -52,7 +67,7 @@ class NoteRepository (val context : Context) : INoteRepository {
 
     private fun generateSampleData() {
 
-        if(realm.where<Note>().count() != 0L)
+        if(realm.where<NoteRealm>().count() != 0L)
             return
 
         context.assets.open("notes.txt")
@@ -61,7 +76,7 @@ class NoteRepository (val context : Context) : INoteRepository {
             .fold(0L) { acc, s ->
                 if(s == "")
                     acc
-                this.addNewNote(Note(acc, generateRandomDate(), s, selectDrawable( acc % 4 + 1)))
+                this.addNewNote(NoteRealm(acc, generateRandomDate(), s, selectDrawable( acc % 4 + 1)))
                 acc + 1
             }
     }

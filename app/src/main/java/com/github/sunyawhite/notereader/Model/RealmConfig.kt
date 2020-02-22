@@ -1,10 +1,10 @@
 package com.github.sunyawhite.notereader.Model
 
 import io.realm.annotations.RealmModule
-import Note
+import NoteRealm
 import io.realm.RealmConfiguration
 
-@RealmModule(classes = [Note::class])
+@RealmModule(classes = [NoteRealm::class])
 object RealmConfig {
     fun provideDefaultConfiguration() : RealmConfiguration =
         RealmConfiguration.Builder()

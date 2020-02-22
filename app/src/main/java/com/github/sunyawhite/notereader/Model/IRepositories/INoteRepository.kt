@@ -1,14 +1,10 @@
 interface INoteRepository {
 
-    fun getSingleNote (predicate: (note: Note) -> Boolean) : Note
+    fun getAllNotes() : List<NoteRealm>?
 
-    fun getNotes(predicate : (note : Note) -> Boolean) : List<Note>
+    fun getNoteById(id : Long) : NoteRealm?
 
-    fun getAllNotes() : List<Note>
-
-    fun getNoteById(id : Long) : Note
-
-    fun addNewNote(note : Note) : Boolean
+    fun addNewNote(note : NoteRealm) : Boolean
 
     fun deleteNote(id : Long) : Boolean
 
