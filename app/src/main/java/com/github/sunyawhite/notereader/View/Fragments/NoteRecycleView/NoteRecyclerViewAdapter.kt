@@ -2,14 +2,15 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
+import kotlinx.android.synthetic.main.fragment_note.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
+ * [RecyclerView.Adapter] that can display a [Note] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class NoteRecyclerViewAdapter(
     private val mValues: List<Note>,
@@ -35,9 +36,9 @@ class NoteRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
-
+        holder.mTextView.text = item.Text
+        holder.mLabelView.text = "${item.Date}"
+        holder.mImageView.setImageResource(item.DrawableRes)
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
@@ -47,11 +48,12 @@ class NoteRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        val mLabelView: TextView = mView.noteLabelView
+        val mTextView: TextView = mView.noteTextView
+        val mImageView : ImageView = mView.noteImageView
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + mLabelView.text + "'"
         }
     }
 }

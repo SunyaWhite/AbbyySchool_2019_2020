@@ -1,16 +1,15 @@
-package com.github.sunyawhite.notereader
-
+package com.github.sunyawhite.notereader.View
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.sunyawhite.notereader.R
+import kotlinx.android.synthetic.main.fragment_display_note.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "display_fragment_full_text"
+private const val ARG_PARAM2 = "display_fragment_image_id"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,15 +17,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DisplayNoteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var fullText: String? = "MEOW-MEOW_MEOW"
+    private var imageId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            fullText = it.getString(ARG_PARAM1)
+            imageId = it.getInt(ARG_PARAM2)
         }
     }
 
@@ -35,7 +33,10 @@ class DisplayNoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_display_note, container, false)
+        var view = inflater.inflate(R.layout.fragment_display_note, container, false)
+        view.fullText.text = this.fullText;
+        view.imageView.setImageResource(this.imageId ?: R.drawable.cat1)
+        return view
     }
 
 
@@ -48,7 +49,6 @@ class DisplayNoteFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment DisplayNoteFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             DisplayNoteFragment().apply {

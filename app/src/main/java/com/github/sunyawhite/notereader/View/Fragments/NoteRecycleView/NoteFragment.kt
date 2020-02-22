@@ -81,11 +81,10 @@ class NoteFragment : Fragment() {
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
+        // List of columns for RecycleView
         const val ARG_COLUMN_COUNT = "note_fragment_column-count"
-
-        // TODO: Customize parameter initialization
+        
+        // Factory pattern for NoteFragment
         @JvmStatic
         fun newInstance(columnCount: Int) =
             NoteFragment().apply {
