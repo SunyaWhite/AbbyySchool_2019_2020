@@ -1,5 +1,6 @@
 package com.github.sunyawhite.notereader.View
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.github.sunyawhite.notereader.Model.INoteRepository
@@ -35,9 +36,16 @@ class MainActivity : AppCompatActivity(),
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
 
+        // Получаем id элемента, где будем отображать фрагмент
+        val layoutId =
+            if (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                R.id.mainHelperFragment
+            else
+                R.id.mainDynamicFragment
+
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainDynamicFragment, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
+            .replace(layoutId, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
     }
