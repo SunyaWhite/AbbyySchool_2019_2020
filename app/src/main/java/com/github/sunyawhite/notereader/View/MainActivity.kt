@@ -43,8 +43,10 @@ class MainActivity : AppCompatActivity(),
             else
                 R.id.mainDynamicFragment
 
+        // Переход к другому фрагменту
         supportFragmentManager
             .beginTransaction()
+            .setCustomAnimations(R.anim.enter, R.anim.exit)
             .replace(layoutId, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
