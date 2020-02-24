@@ -28,6 +28,7 @@ android {
     sourceSets {
         main {
             java.srcDirs = ['src/main/java', 'src/main/java/com/github/sunyawhite/notereader/Models', 'src/main/java/com/github/sunyawhite/notereader/Model/Entities', 'src/main/java/com/github/sunyawhite/notereader/Model/IRepositories', 'src/main/java/com/github/sunyawhite/notereader/Model/Repositories', '/src/main/java/com/github/sunyawhite/notereader/Model/DTOs', 'src/main/java/com/github/sunyawhite/notereader/Model/DTOs', ' /src/main/java/com/github/sunyawhite/notereader/View/Activities', 'src/main/java/com/github/sunyawhite/notereader/View/Fragments', 'src/main/java/com/github/sunyawhite/notereader/View/Fragments/NoteRecycleView']
+            res.srcDirs = ['src/main/res', 'src/main/res/layout-sw600dp-land']
         }
     }
 }
