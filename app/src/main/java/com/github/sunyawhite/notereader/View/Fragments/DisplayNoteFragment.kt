@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import kotlinx.android.synthetic.main.fragment_display_note.view.*
+import org.koin.android.ext.android.inject
 import java.lang.NullPointerException
 
 private const val ARG_PARAM1 = "display_fragment_note_id"
@@ -21,16 +23,9 @@ private const val ARG_PARAM1 = "display_fragment_note_id"
 class DisplayNoteFragment : Fragment() {
 
     private var noteId : Long? = null
-    private var listener: InteractWithDisplayNoteFragment? = null
 
-    override fun onAttach(context: Context) {
-        if (context is InteractWithDisplayNoteFragment) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
-        super.onAttach(context)
-    }
+    // Repository to deal with database
+    private val repository : INoteRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +38,7 @@ class DisplayNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val note = listener?.getNoteById(noteId ?: 0) ?: throw NullPointerException("Note can't be null")
+        val note = this.getNoteById(noteId ?: 0) ?: throw NullPointerException("Note can't be null")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_display_note, container, false)
         view.fullText.text = note.Text
@@ -51,14 +46,9 @@ class DisplayNoteFragment : Fragment() {
         return view
     }
 
-    /**
-     * Интерфейс, реализуемый активити.
-     * Используется для получения ифнормации об отображаемом Note
-     */
-    interface InteractWithDisplayNoteFragment{
 
-        fun getNoteById(id : Long) : Note
-    }
+    private fun getNoteById(id: Long) : Note  =
+        repository.getNoteById(id) ?: throw IllegalArgumentException("id is null")
 
     companion object {
         // Tag for the fragment
