@@ -1,4 +1,5 @@
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -7,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import org.koin.android.ext.android.inject
 
 /**
  * A fragment representing a list of Items.
@@ -21,18 +24,16 @@ class NoteFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    // Repository to deal with database
+    private val repository : INoteRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Получение кол-ва колонок для отображения
+        val columnCount = getColumnCount()
+
         val view = inflater.inflate(R.layout.fragment_note_list, container, false)
 
         // Set the adapter
@@ -42,12 +43,10 @@ class NoteFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = listener?.getListOfItems()?.let {
-                    NoteRecyclerViewAdapter(
-                        it,
-                        listener
-                    )
-                }
+                adapter = NoteRecyclerViewAdapter(
+                    getListOfItems(),
+                    listener
+                )
             }
         }
         return view
@@ -67,6 +66,16 @@ class NoteFragment : Fragment() {
         listener = null
     }
 
+    // Получение данных из репозитория
+    private fun getListOfItems(): List<Note> =
+        this.repository.getAllNotes() ?: emptyList<Note>()
+
+    // Получение кол-ва отображаемых столбцов
+    private fun getColumnCount() : Int =
+        when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+            true -> 2
+            false -> 1
+        }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -74,8 +83,6 @@ class NoteFragment : Fragment() {
      * activity.
      */
     interface OnListFragmentInteractionListener {
-
-        fun getListOfItems() : List<Note>
 
         fun onListClick(id : Long)
     }
@@ -88,11 +95,7 @@ class NoteFragment : Fragment() {
 
         // Factory pattern for NoteFragment
         @JvmStatic
-        fun newInstance(columnCount: Int) =
-            NoteFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+        fun newInstance() =
+            NoteFragment()
     }
 }

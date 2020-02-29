@@ -8,14 +8,8 @@ import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import org.koin.android.ext.android.inject
 
-//src/main/java/com/github/sunyawhite/notereader/Model/
-
 class MainActivity : AppCompatActivity(),
-    NoteFragment.OnListFragmentInteractionListener,
-    DisplayNoteFragment.InteractWithDisplayNoteFragment{
-
-    // Repository to deal with database
-    private val repository : INoteRepository by inject()
+    NoteFragment.OnListFragmentInteractionListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,36 +18,23 @@ class MainActivity : AppCompatActivity(),
         if(savedInstanceState == null)
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(1), NoteFragment.TAG)
+                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(), NoteFragment.TAG)
                 .addToBackStack(null)
                 .commit()
     }
-
-    override fun getListOfItems(): List<Note> =
-        this.repository.getAllNotes() ?: emptyList<Note>()
 
     override fun onListClick(id : Long) {
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
 
-        // Получаем id элемента, где будем отображать фрагмент
-        val layoutId =
-            if (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-                R.id.mainHelperFragment
-            else
-                R.id.mainDynamicFragment
-
         // Переход к другому фрагменту
         supportFragmentManager
             .beginTransaction()
             .setCustomAnimations(R.anim.enter, R.anim.exit)
-            .replace(layoutId, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
+            .replace(R.id.mainHelperFragment, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
     }
-
-    override fun getNoteById(id: Long) : Note  =
-        repository.getNoteById(id) ?: throw IllegalArgumentException("id is null")
 
 
     override fun onBackPressed() {
