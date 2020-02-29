@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import org.koin.android.ext.android.inject
 
 /**
  * A fragment representing a list of Items.
@@ -21,6 +23,9 @@ class NoteFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
+    // Repository to deal with database
+    private val repository : INoteRepository by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,6 +33,7 @@ class NoteFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
     }
+    // Repository to deal with database
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +48,10 @@ class NoteFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = listener?.getListOfItems()?.let {
-                    NoteRecyclerViewAdapter(
-                        it,
-                        listener
-                    )
-                }
+                adapter = NoteRecyclerViewAdapter(
+                    getListOfItems(),
+                    listener
+                )
             }
         }
         return view
@@ -67,6 +71,10 @@ class NoteFragment : Fragment() {
         listener = null
     }
 
+    // Получение данных из репозитория
+    private fun getListOfItems(): List<Note> =
+        this.repository.getAllNotes() ?: emptyList<Note>()
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -74,8 +82,6 @@ class NoteFragment : Fragment() {
      * activity.
      */
     interface OnListFragmentInteractionListener {
-
-        fun getListOfItems() : List<Note>
 
         fun onListClick(id : Long)
     }

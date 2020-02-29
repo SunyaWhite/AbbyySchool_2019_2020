@@ -8,14 +8,8 @@ import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import org.koin.android.ext.android.inject
 
-//src/main/java/com/github/sunyawhite/notereader/Model/
-
 class MainActivity : AppCompatActivity(),
-    NoteFragment.OnListFragmentInteractionListener,
-    DisplayNoteFragment.InteractWithDisplayNoteFragment{
-
-    // Repository to deal with database
-    private val repository : INoteRepository by inject()
+    NoteFragment.OnListFragmentInteractionListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +23,6 @@ class MainActivity : AppCompatActivity(),
                 .commit()
     }
 
-    // TODO Вынести иньекцию во фрагменты
-    override fun getListOfItems(): List<Note> =
-        this.repository.getAllNotes() ?: emptyList<Note>()
-
     override fun onListClick(id : Long) {
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
@@ -45,9 +35,6 @@ class MainActivity : AppCompatActivity(),
             .addToBackStack(null)
             .commit()
     }
-
-    override fun getNoteById(id: Long) : Note  =
-        repository.getNoteById(id) ?: throw IllegalArgumentException("id is null")
 
 
     override fun onBackPressed() {
