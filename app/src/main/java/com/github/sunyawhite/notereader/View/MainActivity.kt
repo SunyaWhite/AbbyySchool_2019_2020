@@ -24,11 +24,12 @@ class MainActivity : AppCompatActivity(),
         if(savedInstanceState == null)
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(1), NoteFragment.TAG)
+                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(this.getColumnCount()), NoteFragment.TAG)
                 .addToBackStack(null)
                 .commit()
     }
 
+    // TODO Вынести иньекцию во фрагменты
     override fun getListOfItems(): List<Note> =
         this.repository.getAllNotes() ?: emptyList<Note>()
 
@@ -36,18 +37,11 @@ class MainActivity : AppCompatActivity(),
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
 
-        // Получаем id элемента, где будем отображать фрагмент
-        val layoutId =
-            if (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-                R.id.mainHelperFragment
-            else
-                R.id.mainDynamicFragment
-
         // Переход к другому фрагменту
         supportFragmentManager
             .beginTransaction()
             .setCustomAnimations(R.anim.enter, R.anim.exit)
-            .replace(layoutId, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
+            .replace(R.id.mainHelperFragment, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
     }
@@ -62,4 +56,10 @@ class MainActivity : AppCompatActivity(),
             else -> super.onBackPressed()
         }
     }
+
+    private fun getColumnCount() : Int =
+        when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+            true -> 2
+            false -> 1
+        }
 }
