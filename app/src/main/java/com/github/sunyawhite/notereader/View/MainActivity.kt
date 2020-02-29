@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(),
         if(savedInstanceState == null)
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(this.getColumnCount()), NoteFragment.TAG)
+                .replace(R.id.mainDynamicFragment, NoteFragment.newInstance(), NoteFragment.TAG)
                 .addToBackStack(null)
                 .commit()
     }
@@ -43,10 +43,4 @@ class MainActivity : AppCompatActivity(),
             else -> super.onBackPressed()
         }
     }
-
-    private fun getColumnCount() : Int =
-        when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-            true -> 2
-            false -> 1
-        }
 }
