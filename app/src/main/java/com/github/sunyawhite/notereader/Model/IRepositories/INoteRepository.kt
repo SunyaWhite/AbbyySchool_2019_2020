@@ -1,15 +1,20 @@
 package com.github.sunyawhite.notereader.Model
 
-interface INoteRepository {
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 
-    fun getAllNotes() : List<Note>?
+interface INoteRepository : LifecycleObserver {
 
-    fun getNoteById(id : Long) : Note?
+    suspend fun getAllNotes() : List<Note>?
 
-    fun addNewNote(note : Note) : Boolean
+    suspend fun getNoteById(id : Long) : Note?
 
-    fun deleteNote(id : Long) : Boolean
+    suspend fun addNewNote(note : Note) : Boolean
 
-    fun containsNoteById(id : Long) : Boolean
+    suspend fun deleteNote(id : Long) : Boolean
+
+    suspend fun containsNoteById(id : Long) : Boolean
+
+    fun registerLifecycle(lifecycle: Lifecycle)
 
 }

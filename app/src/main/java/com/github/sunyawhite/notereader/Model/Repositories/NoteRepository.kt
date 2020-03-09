@@ -2,12 +2,15 @@ package com.github.sunyawhite.notereader.Model
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.Lifecycle
 import com.github.sunyawhite.notereader.R
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.exceptions.RealmException
 import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 import kotlin.random.Random
@@ -27,23 +30,25 @@ class NoteRepository (val context : Context) : INoteRepository {
         generateSampleData()
     }
 
-    override fun getAllNotes(): List<Note>? =
+    override suspend fun getAllNotes(): List<Note>? = withContext(Dispatchers.IO) {
         realm.where<NoteRealm>()
             .findAll()
             .map { noteRealm -> Note.toNote(noteRealm) } // конвертируем данные
-
-    override fun getNoteById(id: Long): Note? =
-        Note.toNote(
-            realm.where<NoteRealm>().equalTo("Id", id)
-            .findFirst()
-        )
-
-    override fun addNewNote(note: Note): Boolean {
-        return this.addNewNote(NoteRealm.toNoteRealm(note))
     }
 
-    override fun deleteNote(id: Long): Boolean {
-        return try{
+    override suspend fun getNoteById(id: Long): Note? = withContext(Dispatchers.IO) {
+        Note.toNote(
+            realm.where<NoteRealm>().equalTo("Id", id)
+                .findFirst()
+        )
+    }
+
+    override suspend fun addNewNote(note: Note): Boolean  = withContext(Dispatchers.IO){
+        addNewNote(NoteRealm.toNoteRealm(note))
+    }
+
+    override suspend fun deleteNote(id: Long): Boolean = withContext(Dispatchers.IO) {
+        try{
             realm.executeTransaction { realm ->
                 // Получаем данные из базы
                 var note = realm.where<NoteRealm>().equalTo("Id", id).findFirst()
@@ -59,10 +64,16 @@ class NoteRepository (val context : Context) : INoteRepository {
         }
     }
 
-    override fun containsNoteById(id: Long): Boolean =
+    override suspend fun containsNoteById(id: Long): Boolean = withContext(Dispatchers.IO) {
         realm.where<NoteRealm>().equalTo("Id", id).count() > 0
+    }
 
-    // Метод для добавления данных в базу данных
+    // Lifecycle observer
+    override fun registerLifecycle(lifecycle: Lifecycle) {
+        registerLifecycle(lifecycle)
+    }
+
+    // Метод для добавления данных в базу данных. Вызывается только внутри функция данного класса
     private fun addNewNote(note : NoteRealm) : Boolean{
         return try {
             realm.executeTransaction { realm ->
