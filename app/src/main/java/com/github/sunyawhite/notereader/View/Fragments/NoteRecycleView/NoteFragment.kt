@@ -90,8 +90,6 @@ class NoteFragment : Fragment() {
     companion object {
         // Tag for this fragment
         const val TAG = "LIST_NOTE"
-        // List of columns for RecycleView
-        const val ARG_COLUMN_COUNT = "note_fragment_column-count"
 
         // Factory pattern for NoteFragment
         @JvmStatic

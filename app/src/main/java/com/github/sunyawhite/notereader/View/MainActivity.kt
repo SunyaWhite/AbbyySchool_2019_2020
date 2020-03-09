@@ -1,12 +1,8 @@
 package com.github.sunyawhite.notereader.View
 
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.github.sunyawhite.notereader.Model.INoteRepository
-import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
-import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity(),
     NoteFragment.OnListFragmentInteractionListener{
