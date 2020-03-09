@@ -69,9 +69,9 @@ class NoteRepository (val context : Context) : INoteRepository {
     }
 
     // Lifecycle observer
-    /*override fun registerLifecycle(lifecycle: Lifecycle) {
+    override fun registerLifecycle(lifecycle: Lifecycle) {
         registerLifecycle(lifecycle)
-    }*/
+    }
 
     // Метод для добавления данных в базу данных. Вызывается только внутри функция данного класса
     private fun addNewNote(note : NoteRealm) : Boolean{
