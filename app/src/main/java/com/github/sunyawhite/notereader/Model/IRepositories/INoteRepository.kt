@@ -5,6 +5,8 @@ import androidx.lifecycle.LifecycleObserver
 
 interface INoteRepository : LifecycleObserver {
 
+    suspend fun getNewId() : Long
+
     suspend fun getAllNotes() : List<Note>?
 
     suspend fun getNoteById(id : Long) : Note?

@@ -6,7 +6,7 @@ import java.util.*
 data class Note (val Id : Long,
                  val Date : Date,
                  val Text : String,
-                 val DrawableRes : Int) {
+                 val DrawableRes : String) {
 
     // Converter
     companion object{

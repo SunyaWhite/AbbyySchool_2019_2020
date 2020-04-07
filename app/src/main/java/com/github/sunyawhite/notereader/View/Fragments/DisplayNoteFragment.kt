@@ -46,7 +46,7 @@ class DisplayNoteFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_display_note, container, false)
         view.fullText.text = note.await().Text
-        view.imageView.setImageResource(note.await().DrawableRes)
+        view.imageView.setImageResource(R.drawable.cat1)
         return@runBlocking view
     }
 
