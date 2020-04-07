@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.fragment_note.view.*
  * specified [OnListFragmentInteractionListener].
  */
 class NoteRecyclerViewAdapter(
-    private val mValues: List<Note>,
+    private var mValues: List<Note>,
     private val mListener: NoteFragment.OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
     private val mOnClickListener: View.OnClickListener
 
@@ -26,6 +26,10 @@ class NoteRecyclerViewAdapter(
             // one) that an item has been selected.
             mListener?.onListClick(item.Id)
         }
+    }
+
+    fun updateNoteList(notes : List<Note>) {
+        this.mValues = notes
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -57,3 +61,4 @@ class NoteRecyclerViewAdapter(
         }
     }
 }
+

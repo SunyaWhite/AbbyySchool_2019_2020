@@ -14,6 +14,11 @@ data class Note (val Id : Long,
             require(note != null) { "Argument can't be null" }
             return Note(note.Id, note.Date, note.Text, note.DrawableRes)
         }
+
+        internal fun toNote(note : RoomNote) : Note{
+            require(note != null) {"Argument can't be null"}
+            return Note(note.id, Date(note.date), note.text, note.imagePath)
+        }
     }
 
 }
