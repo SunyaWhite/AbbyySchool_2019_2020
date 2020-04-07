@@ -25,7 +25,7 @@ abstract class SQLNoteDatabase : RoomDatabase(){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SQLNoteDatabase::class.java,
-                    "word_database"
+                    "node_database"
                 ).build()
                 INSTANCE = instance
                 return instance

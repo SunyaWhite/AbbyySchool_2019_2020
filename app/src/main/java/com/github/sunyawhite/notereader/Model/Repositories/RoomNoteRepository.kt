@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
+/*
+    Паттерн Адаптер. Приспосабливаем INoteDAO под наши нужды
+ */
 class RoomNoteRepository (val context : Context) : INoteRepository {
 
     // DAO
