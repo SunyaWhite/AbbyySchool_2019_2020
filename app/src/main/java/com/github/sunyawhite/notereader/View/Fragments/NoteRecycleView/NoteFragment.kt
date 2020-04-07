@@ -28,6 +28,8 @@ class NoteFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
+    private lateinit var noteAdapter : NoteRecyclerViewAdapter
+
     // Repository to deal with database
     private val repository: INoteRepository by inject()
 
@@ -41,6 +43,10 @@ class NoteFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_note_list, container, false)
 
+        noteAdapter = NoteRecyclerViewAdapter(
+            notes.await(),
+            listener)
+
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
@@ -48,13 +54,18 @@ class NoteFragment : Fragment() {
                     columnCount.await() <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount.await())
                 }
-                adapter = NoteRecyclerViewAdapter(
-                    notes.await(),
-                    listener
-                )
+                adapter = noteAdapter
             }
         }
         return@runBlocking view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        runBlocking {
+            noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
+            noteAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -94,6 +105,9 @@ class NoteFragment : Fragment() {
     interface OnListFragmentInteractionListener {
 
         fun onListClick(id: Long)
+
+        //fun updateNoteList(notes : List<Note>)
+
     }
 
     companion object {
