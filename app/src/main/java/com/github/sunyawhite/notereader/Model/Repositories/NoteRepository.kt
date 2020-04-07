@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import com.github.sunyawhite.notereader.R
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.Sort
 import io.realm.exceptions.RealmException
 import io.realm.kotlin.deleteFromRealm
 import io.realm.kotlin.where
@@ -16,7 +17,7 @@ import java.util.*
 import kotlin.random.Random
 
 // Class to
-class NoteRepository (val context : Context) : INoteRepository {
+class RealmNoteRepository (val context : Context) : INoteRepository {
 
     // Database context
     private val realm : Realm
@@ -27,8 +28,14 @@ class NoteRepository (val context : Context) : INoteRepository {
         Realm.init(context)
         config = RealmConfig.provideDefaultConfiguration()
         realm = Realm.getInstance(config)
-        generateSampleData()
     }
+
+    override suspend fun getNewId(): Long = withContext(Dispatchers.IO) {
+        val note = realm.where<NoteRealm>().sort("Id", Sort.DESCENDING)
+            .findFirst()
+        note?.Id ?: 1
+    }
+
 
     override suspend fun getAllNotes(): List<Note>? = withContext(Dispatchers.IO) {
         realm.where<NoteRealm>()
@@ -88,7 +95,7 @@ class NoteRepository (val context : Context) : INoteRepository {
         }
     }
 
-    private fun generateSampleData() {
+    /*private fun generateSampleData() {
 
         if(realm.where<NoteRealm>().count() != 0L)
             return
@@ -99,21 +106,12 @@ class NoteRepository (val context : Context) : INoteRepository {
             .fold(0L) { acc, s ->
                 if(s == "")
                     acc
-                this.addNewNote(NoteRealm(acc, generateRandomDate(), s, selectDrawable( acc % 4 + 1)))
+                this.addNewNote(NoteRealm(acc, generateRandomDate(), s, ))
                 acc + 1
             }
-    }
+    }*/
 
-    private fun generateRandomDate() : Date =
-        Date(Random.nextInt(2000, 2020), Random.nextInt(1, 13), Random.nextInt(1, 30))
+    /*private fun generateRandomDate() : Date =
+        Date(Random.nextInt(2000, 2020), Random.nextInt(1, 13), Random.nextInt(1, 30))*/
 
-    private fun selectDrawable(id : Long) =
-        when(id)
-        {
-            1L -> R.drawable.cat1
-            2L -> R.drawable.cat2
-            3L -> R.drawable.cat3
-            4L -> R.drawable.cat4
-            else -> R.drawable.ic_launcher_foreground
-        }
 }

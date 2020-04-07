@@ -8,7 +8,7 @@ object RealmConfig {
     fun provideDefaultConfiguration() : RealmConfiguration =
         RealmConfiguration.Builder()
             .name("noteDatabase.realm")
-            .schemaVersion(1)
+            .schemaVersion(2)
             .modules(RealmConfig)
             .deleteRealmIfMigrationNeeded().build()
 

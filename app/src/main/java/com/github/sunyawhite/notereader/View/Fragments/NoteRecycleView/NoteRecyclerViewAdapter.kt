@@ -38,7 +38,7 @@ class NoteRecyclerViewAdapter(
         val item = mValues[position]
         holder.mTextView.text = item.Text
         holder.mLabelView.text = "${item.Date}"
-        holder.mImageView.setImageResource(item.DrawableRes)
+        holder.mImageView.setImageResource(R.drawable.cat1)
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
