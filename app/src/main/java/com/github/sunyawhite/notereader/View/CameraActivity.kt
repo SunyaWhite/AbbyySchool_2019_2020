@@ -20,7 +20,9 @@ import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import java.io.File
@@ -107,7 +109,9 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
             val repository : INoteRepository = get()
             Log.d("CameraActivity", "Image taken. Path : ${file.absolutePath}")
             repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), "TestText1", file.absolutePath))
-            //super.onBackPressed()
+            withContext(Dispatchers.Main){
+                super.onBackPressed()
+            }
         }
     }
 
