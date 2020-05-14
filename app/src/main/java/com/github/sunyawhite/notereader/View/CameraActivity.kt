@@ -21,6 +21,7 @@ import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
@@ -36,9 +37,9 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     private val LAST_IMAGE_PATH = "lastImagePath"
     // Unique code for permissions
-    private val PERMISSION_REQUEST_CODE = 123
+    private val PERMISSION_REQUEST_CODE = 12
     // Required permissions
-    private val REQUIRED_PERMISSIONS = arrayOf(CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
+    private val REQUIRED_PERMISSIONS = arrayOf(CAMERA, READ_EXTERNAL_STORAGE)
 
     private lateinit var cameraExecutor : ExecutorService
 
@@ -74,8 +75,7 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     }
 
-    private fun generateFile() : File =
-        File.createTempFile("${System.currentTimeMillis()}", ".jpg", externalMediaDirs.first())
+    private fun generateFile() : File = File(externalMediaDirs.first().absolutePath, "${System.currentTimeMillis().toString()}.jpg")
 
     private fun checkPermissions() = REQUIRED_PERMISSIONS.all { permission ->
         ActivityCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
@@ -107,11 +107,12 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
         runBlocking {
             // service locator
             val repository : INoteRepository = get()
-            Log.d("CameraActivity", "Image taken. Path : ${file.absolutePath}")
-            repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), "TestText1", file.absolutePath))
+            Log.d("CameraActivity", "Image taken. Path : ${file.path}")
+            repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), "TestText1", file.path))
             withContext(Dispatchers.Main){
                 super.onBackPressed()
             }
+            delay(100)
         }
     }
 
