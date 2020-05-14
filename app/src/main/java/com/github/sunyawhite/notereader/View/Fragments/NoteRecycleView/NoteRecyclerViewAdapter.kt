@@ -1,3 +1,4 @@
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_note.view.*
 
 /**
@@ -42,7 +44,12 @@ class NoteRecyclerViewAdapter(
         val item = mValues[position]
         holder.mTextView.text = item.Text
         holder.mLabelView.text = "${item.Date}"
-        holder.mImageView.setImageResource(R.drawable.cat1)
+        // Downloading image into ImageView
+        Picasso.with((mListener as Context))
+            .load("file://" + item.DrawableRes) // should start with "file://"
+            .fit()
+            .centerInside()
+            .into(holder.mView.noteImageView)
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
