@@ -2,12 +2,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
 import com.squareup.picasso.Picasso
@@ -68,9 +66,34 @@ class NoteRecyclerViewAdapter(
     private fun handlePopUpMenu(v : View?){
         // mListener == Context
         val menu = PopupMenu(mListener as Context, v)
+        menu.setOnMenuItemClickListener { item: MenuItem? ->  handleOnClickMenuItem(item)}
         val inflater = menu.menuInflater
         inflater.inflate(R.xml.add_menu, menu.menu)
         menu.show()
+    }
+
+    private fun handleOnClickMenuItem(item : MenuItem?) =
+        when(item?.itemId){
+            R.id.menuShare -> handleShareClick()
+            R.id.menuDelete -> handleDeleteClick()
+            R.id.menuEdit -> handleEditClick()
+            else -> false
+        }
+
+    private fun handleShareClick() : Boolean{
+        Toast.makeText(mListener as Context, "Handle Share", Toast.LENGTH_SHORT).show()
+        return true
+    }
+
+
+    private fun handleDeleteClick() : Boolean{
+        Toast.makeText(mListener as Context, "Handle Delete", Toast.LENGTH_SHORT).show()
+        return true
+    }
+
+    private fun handleEditClick() : Boolean{
+        Toast.makeText(mListener as Context, "Handle Edit", Toast.LENGTH_SHORT).show()
+        return true
     }
 
     override fun getItemCount(): Int = mValues.size
