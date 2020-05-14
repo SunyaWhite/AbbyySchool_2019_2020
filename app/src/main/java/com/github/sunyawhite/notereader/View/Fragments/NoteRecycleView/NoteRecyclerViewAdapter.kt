@@ -1,9 +1,12 @@
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
@@ -18,6 +21,7 @@ class NoteRecyclerViewAdapter(
     private var mValues: List<Note>,
     private val mListener: NoteFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
+
 
     private val mOnClickListener: View.OnClickListener
 
@@ -54,6 +58,19 @@ class NoteRecyclerViewAdapter(
             tag = item
             setOnClickListener(mOnClickListener)
         }
+        holder.mMenuButton.setOnClickListener { v: View? ->
+            require(v != null)
+            this.handlePopUpMenu(v)
+        }
+    }
+
+    @SuppressLint("ResourceType")
+    private fun handlePopUpMenu(v : View?){
+        // mListener == Context
+        val menu = PopupMenu(mListener as Context, v)
+        val inflater = menu.menuInflater
+        inflater.inflate(R.xml.add_menu, menu.menu)
+        menu.show()
     }
 
     override fun getItemCount(): Int = mValues.size
@@ -62,6 +79,7 @@ class NoteRecyclerViewAdapter(
         val mLabelView: TextView = mView.noteLabelView
         val mTextView: TextView = mView.noteTextView
         val mImageView : ImageView = mView.noteImageView
+        val mMenuButton : ImageButton = mView.menuButton
 
         override fun toString(): String {
             return super.toString() + " '" + mLabelView.text + "'"

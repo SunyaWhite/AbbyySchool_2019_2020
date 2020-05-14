@@ -17,7 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.CameraActivity"></activity>
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/add_menu" />
+
+        <activity android:name=".View.CameraActivity" />
         <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
