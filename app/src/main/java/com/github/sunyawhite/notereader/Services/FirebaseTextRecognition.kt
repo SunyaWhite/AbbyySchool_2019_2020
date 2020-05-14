@@ -3,6 +3,7 @@ package com.github.sunyawhite.notereader.Services
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.github.sunyawhite.notereader.R
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
@@ -30,7 +31,7 @@ class FirebaseTextRecognition(val context : Context) : ITextRecognition {
         }
         catch (exc : Exception){
             Log.e("FirebaseTextRecognition", exc.message)
-            "Some default text"
+            R.string.Meow as String
         }
     }
 }
