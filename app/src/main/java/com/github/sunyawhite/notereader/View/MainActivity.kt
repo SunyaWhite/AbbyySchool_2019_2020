@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        requestPermissions()
+        if(!checkPermissions())
+            requestPermissions()
 
         val button : FloatingActionButton = findViewById(R.id.floatingActionButton)
         button.setOnClickListener{ v: View? ->
@@ -65,8 +66,9 @@ class MainActivity : AppCompatActivity(),
     ) {
         when(requestCode){
             PERMISSION_REQUEST_CODE -> {
-                if(grantResults.isNotEmpty() && checkPermissions())
-                    Toast.makeText(this,"Permission are granted", Toast.LENGTH_SHORT).show()
+                if(grantResults.isNotEmpty() && checkPermissions()) {
+                    Toast.makeText(this, "Permission are granted", Toast.LENGTH_SHORT).show()
+                }
                 else{
                     Toast.makeText(this,"Permission are not granted", Toast.LENGTH_SHORT).show()
                     finish()

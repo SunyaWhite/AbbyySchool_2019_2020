@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'realm-android'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -75,4 +76,6 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.5"
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.3.3'
+    // MLKit
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
 }
