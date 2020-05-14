@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_display_note.view.*
+import kotlinx.android.synthetic.main.fragment_note.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -46,7 +48,13 @@ class DisplayNoteFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_display_note, container, false)
         view.fullText.text = note.await().Text
-        view.imageView.setImageResource(R.drawable.cat1)
+        //view.imageView.setImageResource(R.drawable.cat1)
+        Picasso.with(activity!!.applicationContext)
+            .load(note.await().DrawableRes)
+            .fit()
+            .centerInside()
+            .into(view.imageView)
+
         return@runBlocking view
     }
 

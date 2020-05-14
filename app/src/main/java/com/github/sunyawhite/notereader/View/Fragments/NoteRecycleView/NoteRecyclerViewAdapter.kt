@@ -46,7 +46,7 @@ class NoteRecyclerViewAdapter(
         holder.mLabelView.text = "${item.Date}"
         // Downloading image into ImageView
         Picasso.with((mListener as Context))
-            .load("file://" + item.DrawableRes) // should start with "file://"
+            .load(item.DrawableRes)
             .fit()
             .centerInside()
             .into(holder.mView.noteImageView)

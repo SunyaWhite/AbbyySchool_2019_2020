@@ -19,13 +19,11 @@ import androidx.core.content.ContextCompat
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import com.github.sunyawhite.notereader.Services.ITextRecognition
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_camera.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import java.io.File
@@ -49,6 +47,12 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
     private lateinit var imageView : CameraView
 
     private lateinit var cameraButton : Button
+
+    // Note repository to deal with notes
+    private val repository : INoteRepository = get()
+    private val analyzer : ITextRecognition = get()
+
+    //private var job : Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +82,14 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     private fun generateFile() : File = File(externalMediaDirs.first().absolutePath, "${System.currentTimeMillis().toString()}.jpg")
 
+    private suspend fun analyzeImageText(path : String): String = withContext(Dispatchers.IO){
+        analyzer.RecognizeText(path)
+    }
+
+    private suspend fun saveNewNote(text : String, path : String) = withContext(Dispatchers.IO){
+        repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), text, path))
+    }
+
     private fun checkPermissions() = REQUIRED_PERMISSIONS.all { permission ->
         ActivityCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
     }
@@ -105,15 +117,11 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
     }
 
     override fun onImageSaved(file: File) {
-        runBlocking {
-            // service locator
-            val repository : INoteRepository = get()
+        runBlocking(Dispatchers.Main) {
             Log.d("CameraActivity", "Image taken. Path : ${file.path}")
-            repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), "TestText1", file.path))
-            withContext(Dispatchers.Main){
-                super.onBackPressed()
-            }
-            delay(100)
+            var text = analyzeImageText("file://" + file.path)
+            saveNewNote(text, "file://" + file.path)
+            super.onBackPressed()
         }
     }
 
