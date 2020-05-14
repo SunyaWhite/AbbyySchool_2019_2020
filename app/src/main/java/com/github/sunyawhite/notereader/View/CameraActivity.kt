@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -35,7 +37,6 @@ import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
-    private val LAST_IMAGE_PATH = "lastImagePath"
     // Unique code for permissions
     private val PERMISSION_REQUEST_CODE = 12
     // Required permissions
