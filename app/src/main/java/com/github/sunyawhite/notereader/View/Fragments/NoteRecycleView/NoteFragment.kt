@@ -11,6 +11,10 @@ import android.view.ViewGroup
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 /**
@@ -24,32 +28,44 @@ class NoteFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
+    private lateinit var noteAdapter : NoteRecyclerViewAdapter
+
     // Repository to deal with database
-    private val repository : INoteRepository by inject()
+    private val repository: INoteRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View? = runBlocking {
         // Получение кол-ва колонок для отображения
-        val columnCount = getColumnCount()
+        val columnCount = async { getColumnCount() }
+        val notes = async { getListOfItems() }
 
         val view = inflater.inflate(R.layout.fragment_note_list, container, false)
+
+        noteAdapter = NoteRecyclerViewAdapter(
+            notes.await(),
+            listener)
 
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
+                    columnCount.await() <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount.await())
                 }
-                adapter = NoteRecyclerViewAdapter(
-                    getListOfItems(),
-                    listener
-                )
+                adapter = noteAdapter
             }
         }
-        return view
+        return@runBlocking view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        runBlocking {
+            noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
+            noteAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -67,15 +83,19 @@ class NoteFragment : Fragment() {
     }
 
     // Получение данных из репозитория
-    private fun getListOfItems(): List<Note> =
-        this.repository.getAllNotes() ?: emptyList<Note>()
+    private suspend fun getListOfItems(): List<Note> = withContext(Dispatchers.IO) {
+        val notes = async { repository.getAllNotes() }
+        return@withContext notes.await() ?: emptyList<Note>()
+    }
 
     // Получение кол-ва отображаемых столбцов
-    private fun getColumnCount() : Int =
-        when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+    private suspend fun getColumnCount(): Int = withContext(Dispatchers.Default) {
+        return@withContext when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             true -> 2
             false -> 1
         }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -84,14 +104,15 @@ class NoteFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
 
-        fun onListClick(id : Long)
+        fun onListClick(id: Long)
+
+        //fun updateNoteList(notes : List<Note>)
+
     }
 
     companion object {
         // Tag for this fragment
         const val TAG = "LIST_NOTE"
-        // List of columns for RecycleView
-        const val ARG_COLUMN_COUNT = "note_fragment_column-count"
 
         // Factory pattern for NoteFragment
         @JvmStatic

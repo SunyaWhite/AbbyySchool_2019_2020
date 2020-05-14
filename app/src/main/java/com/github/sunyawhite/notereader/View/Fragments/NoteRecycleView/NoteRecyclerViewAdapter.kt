@@ -1,3 +1,4 @@
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_note.view.*
 
 /**
@@ -13,9 +15,9 @@ import kotlinx.android.synthetic.main.fragment_note.view.*
  * specified [OnListFragmentInteractionListener].
  */
 class NoteRecyclerViewAdapter(
-    private val mValues: List<Note>,
+    private var mValues: List<Note>,
     private val mListener: NoteFragment.OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
     private val mOnClickListener: View.OnClickListener
 
@@ -28,6 +30,10 @@ class NoteRecyclerViewAdapter(
         }
     }
 
+    fun updateNoteList(notes : List<Note>) {
+        this.mValues = notes
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_note, parent, false)
@@ -38,7 +44,12 @@ class NoteRecyclerViewAdapter(
         val item = mValues[position]
         holder.mTextView.text = item.Text
         holder.mLabelView.text = "${item.Date}"
-        holder.mImageView.setImageResource(item.DrawableRes)
+        // Downloading image into ImageView
+        Picasso.with((mListener as Context))
+            .load(item.DrawableRes)
+            .fit()
+            .centerInside()
+            .into(holder.mView.noteImageView)
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
@@ -57,3 +68,4 @@ class NoteRecyclerViewAdapter(
         }
     }
 }
+
