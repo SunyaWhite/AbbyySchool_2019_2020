@@ -14,6 +14,9 @@ interface INoteDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNote(note : RoomNote)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateNote(note : RoomNote)
+
     @Delete
     suspend fun deleteNote(note : RoomNote)
 }

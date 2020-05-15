@@ -52,8 +52,6 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
     private val repository : INoteRepository = get()
     private val analyzer : ITextRecognition = get()
 
-    //private var job : Job? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -82,7 +80,7 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     private fun generateFile() : File = File(externalMediaDirs.first().absolutePath, "${System.currentTimeMillis().toString()}.jpg")
 
-    private suspend fun analyzeImageText(path : String): String = withContext(Dispatchers.IO){
+    private suspend fun analyzeImageText(path : String): String = withContext(Dispatchers.Default){
         analyzer.RecognizeText(path)
     }
 
