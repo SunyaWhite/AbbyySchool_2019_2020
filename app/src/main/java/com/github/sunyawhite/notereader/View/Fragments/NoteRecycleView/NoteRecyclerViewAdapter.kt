@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.fragment_note.view.*
  */
 class NoteRecyclerViewAdapter(
     private var mValues: List<Note>,
-    private val mListener: NoteFragment.OnListFragmentInteractionListener?
+    private val mListener: NoteFragment.OnListFragmentInteractionListener?,
+    private val onDeleteListener : OnElementDeleteListener?
 ) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
     // mListener == Context == Activity
@@ -94,8 +95,8 @@ class NoteRecyclerViewAdapter(
 
 
     private fun handleDeleteClick(id : Long) : Boolean{
-        require(mListener != null)
-        mListener.onDeleteButtonClick(id)
+        require(onDeleteListener != null)
+        onDeleteListener.onDeleteButtonClick(id)
         return true
     }
 
@@ -106,6 +107,11 @@ class NoteRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = mValues.size
+
+    interface OnElementDeleteListener{
+
+        fun onDeleteButtonClick(id : Long)
+    }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mLabelView: TextView = mView.noteLabelView

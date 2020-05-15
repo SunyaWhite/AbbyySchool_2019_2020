@@ -52,10 +52,6 @@ class MainActivity : AppCompatActivity(),
             .commit()
     }
 
-    override fun onDeleteButtonClick(id: Long) {
-        Toast.makeText(this, "Handle Delete $id", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onEditButtonClick(id: Long) {
         Toast.makeText(this, "Handle Edit $id", Toast.LENGTH_SHORT).show()
     }

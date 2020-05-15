@@ -23,7 +23,7 @@ import org.koin.android.ext.android.inject
  * Activities containing this fragment MUST implement the
  * [NoteFragment.OnListFragmentInteractionListener] interface.
  */
-class NoteFragment : Fragment() {
+class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnElementDeleteListener {
 
     private var columnCount = 1
 
@@ -46,7 +46,8 @@ class NoteFragment : Fragment() {
 
         noteAdapter = NoteRecyclerViewAdapter(
             notes.await(),
-            listener)
+            listener,
+            this@NoteFragment)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -107,8 +108,6 @@ class NoteFragment : Fragment() {
 
         fun onListClick(id: Long)
 
-        fun onDeleteButtonClick(id : Long)
-
         fun onEditButtonClick(id : Long)
 
         fun onShareButtonClick(intent : Intent)
@@ -122,5 +121,13 @@ class NoteFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
             NoteFragment()
+    }
+
+    override fun onDeleteButtonClick(id: Long) {
+        runBlocking {
+            repository.deleteNote(id)
+            noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
+            noteAdapter.notifyDataSetChanged()
+        }
     }
 }
