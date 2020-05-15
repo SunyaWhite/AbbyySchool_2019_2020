@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
@@ -123,6 +125,10 @@ class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnNoteAdapterListener {
     }
 
     override fun onDeleteButtonClick(id: Long) {
+        deleteNote(id)
+    }
+
+    private fun deleteNote(id : Long) {
         runBlocking {
             repository.deleteNote(id)
             noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
