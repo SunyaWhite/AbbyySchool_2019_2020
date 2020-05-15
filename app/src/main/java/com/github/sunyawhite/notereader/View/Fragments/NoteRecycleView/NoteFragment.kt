@@ -2,6 +2,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,13 +18,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import java.lang.Exception
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
  * [NoteFragment.OnListFragmentInteractionListener] interface.
  */
-class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnElementDeleteListener {
+class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnNoteAdapterListener {
 
     private var columnCount = 1
 
@@ -64,10 +66,7 @@ class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnElementDeleteListener
 
     override fun onResume() {
         super.onResume()
-        runBlocking {
-            noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
-            noteAdapter.notifyDataSetChanged()
-        }
+        onUpdateElement()
     }
 
     override fun onAttach(context: Context) {
@@ -128,6 +127,20 @@ class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnElementDeleteListener
             repository.deleteNote(id)
             noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
             noteAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onUpdateElement(): Boolean {
+        try {
+            runBlocking {
+                noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
+                noteAdapter.notifyDataSetChanged()
+            }
+            return true
+        }
+        catch (exc : Exception){
+            Log.e("NoteFragment", exc.message)
+            return false;
         }
     }
 }

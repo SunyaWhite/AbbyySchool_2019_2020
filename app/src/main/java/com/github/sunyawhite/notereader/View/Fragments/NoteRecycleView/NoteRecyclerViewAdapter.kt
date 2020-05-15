@@ -12,6 +12,9 @@ import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_note.view.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * [RecyclerView.Adapter] that can display a [Note] and makes a call to the
@@ -20,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_note.view.*
 class NoteRecyclerViewAdapter(
     private var mValues: List<Note>,
     private val mListener: NoteFragment.OnListFragmentInteractionListener?,
-    private val onDeleteListener : OnElementDeleteListener?
+    private val onAdapterListener : OnNoteAdapterListener?
 ) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
     // mListener == Context == Activity
@@ -95,8 +98,8 @@ class NoteRecyclerViewAdapter(
 
 
     private fun handleDeleteClick(id : Long) : Boolean{
-        require(onDeleteListener != null)
-        onDeleteListener.onDeleteButtonClick(id)
+        require(onAdapterListener != null)
+        onAdapterListener.onDeleteButtonClick(id)
         return true
     }
 
@@ -108,9 +111,11 @@ class NoteRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
-    interface OnElementDeleteListener{
+    interface OnNoteAdapterListener{
 
         fun onDeleteButtonClick(id : Long)
+
+        fun onUpdateElement() : Boolean
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {

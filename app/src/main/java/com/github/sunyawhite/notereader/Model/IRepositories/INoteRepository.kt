@@ -17,6 +17,8 @@ interface INoteRepository : LifecycleObserver {
 
     suspend fun containsNoteById(id : Long) : Boolean
 
+    suspend fun updateNote(note : Note) : Boolean
+
     fun registerLifecycle(lifecycle: Lifecycle)
 
 }

@@ -67,6 +67,17 @@ class RoomNoteRepository (val context : Context) : INoteRepository {
         }
     }
 
+    override suspend fun updateNote(note: Note): Boolean = withContext(Dispatchers.IO){
+        try{
+            dao.updateNote(RoomNote.toNoteRoom(note))
+            true
+        }
+        catch (exc : Exception){
+            Log.e("RoomNoteRepository", exc.message)
+            false
+        }
+    }
+
     override fun registerLifecycle(lifecycle: Lifecycle) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

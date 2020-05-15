@@ -75,6 +75,10 @@ class RealmNoteRepository (val context : Context) : INoteRepository {
         realm.where<NoteRealm>().equalTo("Id", id).count() > 0
     }
 
+    override suspend fun updateNote(note: Note): Boolean {
+        TODO("Not yet implemented")
+    }
+
     // Lifecycle observer
     override fun registerLifecycle(lifecycle: Lifecycle) {
         registerLifecycle(lifecycle)
