@@ -29,7 +29,7 @@ class FirebaseTextRecognition(val context : Context) : ITextRecognition {
                 }
                 .addOnFailureListener { e ->
                     Log.e("FirebaseTextRecognition", e.message)
-                    continuation.resume(R.string.Meow as String)
+                    continuation.resume( "")
                 }
         }
     }

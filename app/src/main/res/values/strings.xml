@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">NoteReader</string>
 
+    <!-- Delete an element. Dialog -->
+    <string name="OK">Ok</string>
+    <string name="NO">Cancel</string>
+    <string name="Title">Confirm action</string>
+    <string name="Message">Delete this element</string>
+    <string name="Confirmed">The element was deleted</string>
+    <string name="Canceled">The action was canceled</string>
+
     <!-- Share intent value types -->
     <string name="text_plain">text/plain</string>
 
@@ -16,7 +24,8 @@
 
     <!-- CameraActivity -->
     <string name="takeAPicture"> Take a picture </string>>
-
     <string name="need_permissions"> Need permissions </string>
     <string name="set_permissions"> Set permissions in settings</string>
+
+
 </resources>
