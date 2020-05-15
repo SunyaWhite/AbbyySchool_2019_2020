@@ -87,7 +87,7 @@ class NoteRecyclerViewAdapter(
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
         shareIntent.putExtra(Intent.EXTRA_TEXT, mValues.first{note -> note.Id == id}.Text)
-        shareIntent.type = R.string.text_plain as String
+        shareIntent.type = (mListener as Context).getString( R.string.text_plain)
         mListener.onShareButtonClick(shareIntent)
         return true
     }
