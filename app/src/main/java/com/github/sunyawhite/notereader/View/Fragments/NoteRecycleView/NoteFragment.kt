@@ -1,6 +1,6 @@
 package com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView
 
-import NoteRecyclerViewAdapter
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
@@ -129,7 +130,20 @@ class NoteFragment : Fragment(),
     }
 
     override fun onDeleteButtonClick(id: Long) {
-        deleteNote(id)
+        val builder = AlertDialog.Builder(activity)
+        with(builder){
+            setTitle(getString(R.string.Title))
+            setMessage(getString(R.string.Message))
+            setPositiveButton(getString(R.string.OK)) { dialog, which -> run {
+                Toast.makeText(activity, getString(R.string.Confirmed), Toast.LENGTH_SHORT).show()
+                deleteNote(id)
+            }}
+            setNegativeButton(getString(R.string.NO)) { dialog, which ->
+                Toast.makeText(activity,
+                    getString(R.string.Canceled), Toast.LENGTH_SHORT).show()
+            }
+            builder.create().show()
+        }
     }
 
     private fun deleteNote(id : Long) {

@@ -1,7 +1,5 @@
 package com.github.sunyawhite.notereader.View
 
-import DisplayNoteFragment
-import NoteFragment
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +8,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.github.sunyawhite.notereader.R
+import com.github.sunyawhite.notereader.View.Fragments.DisplayNoteFragment
+import com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView.NoteFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(),
