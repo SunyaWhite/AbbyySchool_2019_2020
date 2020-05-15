@@ -1,6 +1,5 @@
-package com.github.sunyawhite.notereader.View
+package com.github.sunyawhite.notereader.View.Fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,13 +10,11 @@ import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_display_note.view.*
-import kotlinx.android.synthetic.main.fragment_note.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
-import java.lang.NullPointerException
 
 private const val ARG_PARAM1 = "display_fragment_note_id"
 
