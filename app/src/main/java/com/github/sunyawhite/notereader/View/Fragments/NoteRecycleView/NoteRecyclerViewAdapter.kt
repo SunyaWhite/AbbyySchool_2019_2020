@@ -58,21 +58,21 @@ class NoteRecyclerViewAdapter(
         }
         holder.mMenuButton.setOnClickListener { v: View? ->
             require(v != null)
-            this.handlePopUpMenu(v)
+            this.handlePopUpMenu(v, item.Id)
         }
     }
 
     @SuppressLint("ResourceType")
-    private fun handlePopUpMenu(v : View?){
+    private fun handlePopUpMenu(v : View?, id : Long){
         // mListener == Context
         val menu = PopupMenu(mListener as Context, v)
-        menu.setOnMenuItemClickListener { item: MenuItem? ->  handleOnClickMenuItem(item)}
+        menu.setOnMenuItemClickListener { menuItem: MenuItem? ->  handleOnClickMenuItem(menuItem, id)}
         val inflater = menu.menuInflater
         inflater.inflate(R.xml.add_menu, menu.menu)
         menu.show()
     }
 
-    private fun handleOnClickMenuItem(item : MenuItem?) =
+    private fun handleOnClickMenuItem(item : MenuItem?, id : Long) =
         when(item?.itemId){
             R.id.menuShare -> handleShareClick()
             R.id.menuDelete -> handleDeleteClick()
