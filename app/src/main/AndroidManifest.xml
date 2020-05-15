@@ -17,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".View.EditNoteActivity"></activity>
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/add_menu" />

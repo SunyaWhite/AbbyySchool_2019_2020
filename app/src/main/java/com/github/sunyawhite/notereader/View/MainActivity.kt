@@ -13,8 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity(),
-    NoteFragment.OnListFragmentInteractionListener,
-EditNoteFragment.OnSaveEditedNoteListener{
+    NoteFragment.OnListFragmentInteractionListener{
 
     private val PERMISSION_REQUEST_CODE = 4
     // Required permissions
@@ -54,15 +53,10 @@ EditNoteFragment.OnSaveEditedNoteListener{
     }
 
     override fun onEditButtonClick(id: Long) {
-        if(supportFragmentManager.findFragmentByTag(EditNoteFragment.TAG) != null)
-            supportFragmentManager.popBackStack()
-        // Переход к другому фрагменту
-        supportFragmentManager
-            .beginTransaction()
-            .setCustomAnimations(R.anim.enter, R.anim.exit)
-            .replace(R.id.mainHelperFragment, EditNoteFragment.newInstance(id), EditNoteFragment.TAG)
-            .addToBackStack(null)
-            .commit()
+        startActivity(Intent(this, EditNoteActivity::class.java).apply
+        {
+            putExtra(EditNoteActivity.TAG, id)
+        })
     }
 
     override fun onShareButtonClick(intent: Intent) {
@@ -103,9 +97,5 @@ EditNoteFragment.OnSaveEditedNoteListener{
             1 -> finish()
             else -> super.onBackPressed()
         }
-    }
-
-    override fun onClickSaveButton() {
-        onBackPressed()
     }
 }
