@@ -1,3 +1,6 @@
+package com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView
+
+import NoteRecyclerViewAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -10,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.Model.Note
 import com.github.sunyawhite.notereader.R
@@ -27,7 +28,8 @@ import java.lang.Exception
  * Activities containing this fragment MUST implement the
  * [NoteFragment.OnListFragmentInteractionListener] interface.
  */
-class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnNoteAdapterListener {
+class NoteFragment : Fragment(),
+    NoteRecyclerViewAdapter.OnNoteAdapterListener {
 
     private var columnCount = 1
 
@@ -48,10 +50,12 @@ class NoteFragment : Fragment(), NoteRecyclerViewAdapter.OnNoteAdapterListener {
 
         val view = inflater.inflate(R.layout.fragment_note_list, container, false)
 
-        noteAdapter = NoteRecyclerViewAdapter(
-            notes.await(),
-            listener,
-            this@NoteFragment)
+        noteAdapter =
+            NoteRecyclerViewAdapter(
+                notes.await(),
+                listener,
+                this@NoteFragment
+            )
 
         // Set the adapter
         if (view is RecyclerView) {

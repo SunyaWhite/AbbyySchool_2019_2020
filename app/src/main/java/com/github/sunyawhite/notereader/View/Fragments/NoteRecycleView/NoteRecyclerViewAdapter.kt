@@ -1,3 +1,5 @@
+package com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -7,14 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
+import com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView.NoteFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_note.view.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * [RecyclerView.Adapter] that can display a [Note] and makes a call to the
