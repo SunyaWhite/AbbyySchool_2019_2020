@@ -1,11 +1,13 @@
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.github.sunyawhite.notereader.Model.INoteRepository
 import com.github.sunyawhite.notereader.R
 import com.github.sunyawhite.notereader.Model.Note
 import com.squareup.picasso.Picasso
@@ -20,6 +22,7 @@ class NoteRecyclerViewAdapter(
     private val mListener: NoteFragment.OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
+    // mListener == Context == Activity
 
     private val mOnClickListener: View.OnClickListener
 
@@ -64,7 +67,6 @@ class NoteRecyclerViewAdapter(
 
     @SuppressLint("ResourceType")
     private fun handlePopUpMenu(v : View?, id : Long){
-        // mListener == Context
         val menu = PopupMenu(mListener as Context, v)
         menu.setOnMenuItemClickListener { menuItem: MenuItem? ->  handleOnClickMenuItem(menuItem, id)}
         val inflater = menu.menuInflater
@@ -74,25 +76,32 @@ class NoteRecyclerViewAdapter(
 
     private fun handleOnClickMenuItem(item : MenuItem?, id : Long) =
         when(item?.itemId){
-            R.id.menuShare -> handleShareClick()
-            R.id.menuDelete -> handleDeleteClick()
-            R.id.menuEdit -> handleEditClick()
+            R.id.menuShare -> handleShareClick(id)
+            R.id.menuDelete -> handleDeleteClick(id)
+            R.id.menuEdit -> handleEditClick(id)
             else -> false
         }
 
-    private fun handleShareClick() : Boolean{
-        Toast.makeText(mListener as Context, "Handle Share", Toast.LENGTH_SHORT).show()
+    private fun handleShareClick(id : Long) : Boolean{
+        require(mListener != null)
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mValues.first{note -> note.Id == id}.Text)
+        shareIntent.type = R.string.text_plain as String
+        mListener.onShareButtonClick(shareIntent)
         return true
     }
 
 
-    private fun handleDeleteClick() : Boolean{
-        Toast.makeText(mListener as Context, "Handle Delete", Toast.LENGTH_SHORT).show()
+    private fun handleDeleteClick(id : Long) : Boolean{
+        require(mListener != null)
+        mListener.onDeleteButtonClick(id)
         return true
     }
 
-    private fun handleEditClick() : Boolean{
-        Toast.makeText(mListener as Context, "Handle Edit", Toast.LENGTH_SHORT).show()
+    private fun handleEditClick(id : Long) : Boolean{
+        require(mListener != null)
+        mListener.onEditButtonClick(id)
         return true
     }
 

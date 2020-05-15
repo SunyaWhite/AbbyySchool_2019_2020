@@ -1,5 +1,6 @@
 package com.github.sunyawhite.notereader.View
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +50,18 @@ class MainActivity : AppCompatActivity(),
             .replace(R.id.mainHelperFragment, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onDeleteButtonClick(id: Long) {
+        Toast.makeText(this, "Handle Delete $id", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onEditButtonClick(id: Long) {
+        Toast.makeText(this, "Handle Edit $id", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onShareButtonClick(intent: Intent) {
+        startActivity(intent)
     }
 
     private fun checkPermissions() = REQUIRED_PERMISSIONS.all { permission ->

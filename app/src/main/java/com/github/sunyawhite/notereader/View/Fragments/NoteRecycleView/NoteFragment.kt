@@ -1,4 +1,5 @@
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -106,8 +107,11 @@ class NoteFragment : Fragment() {
 
         fun onListClick(id: Long)
 
-        //fun updateNoteList(notes : List<Note>)
+        fun onDeleteButtonClick(id : Long)
 
+        fun onEditButtonClick(id : Long)
+
+        fun onShareButtonClick(intent : Intent)
     }
 
     companion object {
