@@ -15,6 +15,9 @@ import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+/*
+    Класс для распознавания текста. Используем Firebase MLKit
+ */
 class FirebaseTextRecognition(val context : Context) : ITextRecognition {
 
 

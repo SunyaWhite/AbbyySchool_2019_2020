@@ -10,7 +10,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val repositoryModule : Module = module {
-    //factory <INoteRepository> { RealmNoteRepository(get()) }
-    factory <INoteRepository> { RoomNoteRepository(get()) }
-    factory <ITextRecognition> { FirebaseTextRecognition(get()) }
+    // setting classes for DI
+    single <INoteRepository> { RoomNoteRepository(get()) }
+    single <ITextRecognition> { FirebaseTextRecognition(get()) }
 }

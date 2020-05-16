@@ -2,6 +2,7 @@ package com.github.sunyawhite.notereader.Model
 
 import androidx.room.*
 
+// Запросики - мутации
 @Dao
 interface INoteDAO {
 

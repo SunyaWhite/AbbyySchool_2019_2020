@@ -22,11 +22,11 @@ import kotlinx.android.synthetic.main.fragment_note.view.*
 class NoteRecyclerViewAdapter(
     private var mValues: List<Note>,
     private val mListener: NoteFragment.OnListFragmentInteractionListener?,
-    private val onAdapterListener : OnNoteAdapterListener?
+    private val onAdapterListener: OnNoteAdapterListener?
 ) : RecyclerView.Adapter<NoteRecyclerViewAdapter.ViewHolder>(){
 
-    // mListener == Context == Activity
-
+    // mListener == Context == Activity - не совсем удачная идея. Появляется связанность
+    // onAdapterListener - обработчик запросов на удаление заметки
     private val mOnClickListener: View.OnClickListener
 
     init {
@@ -38,6 +38,7 @@ class NoteRecyclerViewAdapter(
         }
     }
 
+    // Обновляем список заметок
     fun updateNoteList(notes : List<Note>) {
         this.mValues = notes
     }
@@ -68,6 +69,7 @@ class NoteRecyclerViewAdapter(
         }
     }
 
+    // Создаем всплывающее окошко
     @SuppressLint("ResourceType")
     private fun handlePopUpMenu(v : View?, id : Long){
         val menu = PopupMenu(mListener as Context, v)
@@ -77,6 +79,7 @@ class NoteRecyclerViewAdapter(
         menu.show()
     }
 
+    // Занимаемся обработкой нажатых в менюшке кнопок
     private fun handleOnClickMenuItem(item : MenuItem?, id : Long) =
         when(item?.itemId){
             R.id.menuShare -> handleShareClick(id)
@@ -85,6 +88,7 @@ class NoteRecyclerViewAdapter(
             else -> false
         }
 
+    // Расшариваем заметку
     private fun handleShareClick(id : Long) : Boolean{
         require(mListener != null)
         val shareIntent = Intent()
@@ -95,13 +99,14 @@ class NoteRecyclerViewAdapter(
         return true
     }
 
-
+    // Удаляем заметку
     private fun handleDeleteClick(id : Long) : Boolean{
         require(onAdapterListener != null)
         onAdapterListener.onDeleteButtonClick(id)
         return true
     }
 
+    // Отправляем заметку на исправление
     private fun handleEditClick(id : Long) : Boolean{
         require(mListener != null)
         mListener.onEditButtonClick(id)
@@ -110,11 +115,10 @@ class NoteRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
+    // Интерфейс для обработчика событий по нажатию на кнопки PopUp-а
     interface OnNoteAdapterListener{
 
         fun onDeleteButtonClick(id : Long)
-
-        fun onUpdateElement() : Boolean
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {

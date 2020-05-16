@@ -31,7 +31,7 @@ class EditNoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_note)
 
         runBlocking {
-
+            // Получаем заметку из БД
             val note = async(Dispatchers.IO) {
                 val id = intent.getLongExtra(TAG, -1)
                 if(id == -1L)
@@ -39,12 +39,14 @@ class EditNoteActivity : AppCompatActivity() {
                 repository.getNoteById(id)
             }
 
+            // Получаем элементы UI
             val text = findViewById<EditText>(R.id.editNoteText)
             val image = findViewById<ImageView>(R.id.imageView)
             val button = findViewById<Button>(R.id.saveNote)
 
             if(note.await() == null)
                 finish()
+            // Сохраняем нашу заметку
             editableNote = note.await()
 
             text.setText(editableNote?.Text)
@@ -78,6 +80,7 @@ class EditNoteActivity : AppCompatActivity() {
         }
     }
 
+    // Статические поля
     companion object {
         const val TAG = "EDIT_NOTE"
     }

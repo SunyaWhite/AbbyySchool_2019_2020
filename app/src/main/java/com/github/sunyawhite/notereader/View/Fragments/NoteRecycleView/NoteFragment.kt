@@ -47,6 +47,7 @@ class NoteFragment : Fragment(),
     ): View? = runBlocking {
         // Получение кол-ва колонок для отображения
         val columnCount = async { getColumnCount() }
+        // Получение заметки для отображения
         val notes = async { getListOfItems() }
 
         val view = inflater.inflate(R.layout.fragment_note_list, container, false)
@@ -96,7 +97,7 @@ class NoteFragment : Fragment(),
         return@withContext notes.await() ?: emptyList<Note>()
     }
 
-    // Получение кол-ва отображаемых столбцов
+    // Получение кол-ва отображаемых столбцов (разное для планшетов и телефонов)
     private suspend fun getColumnCount(): Int = withContext(Dispatchers.Default) {
         return@withContext when (resources.getBoolean(R.bool.isTablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             true -> 2
@@ -119,6 +120,8 @@ class NoteFragment : Fragment(),
         fun onShareButtonClick(intent : Intent)
     }
 
+
+    // Статические поля и фабрика для создания нового элемента
     companion object {
         // Tag for this fragment
         const val TAG = "LIST_NOTE"
@@ -146,25 +149,25 @@ class NoteFragment : Fragment(),
         }
     }
 
+    // Удаление заметки
     private fun deleteNote(id : Long) {
         runBlocking {
             repository.deleteNote(id)
-            noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
-            noteAdapter.notifyDataSetChanged()
+            onUpdateElement()
         }
     }
 
-    override fun onUpdateElement(): Boolean {
-        try {
+    // Оповещаем адаптер, что нужно обновить список
+    private fun onUpdateElement(): Boolean {
+        return try {
             runBlocking {
                 noteAdapter.updateNoteList(repository.getAllNotes() ?: emptyList<Note>())
                 noteAdapter.notifyDataSetChanged()
             }
-            return true
-        }
-        catch (exc : Exception){
+            true
+        } catch (exc : Exception){
             Log.e("NoteFragment", exc.message)
-            return false;
+            false;
         }
     }
 }

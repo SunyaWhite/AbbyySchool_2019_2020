@@ -55,11 +55,12 @@ class DisplayNoteFragment : Fragment() {
         return@runBlocking view
     }
 
-
+    // Находим заметку, которую нужно отобразить
     private suspend fun getNoteById(id: Long) : Note  = withContext(Dispatchers.IO) {
         return@withContext repository.getNoteById(id) ?: throw IllegalArgumentException("id is null")
     }
 
+    // Статические поля и фабрика для создания нового фрагмента
     companion object {
         // Tag for the fragment
         const val TAG = "DISPLAY_NOTE"

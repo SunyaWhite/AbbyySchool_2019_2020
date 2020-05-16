@@ -26,8 +26,10 @@ class MainActivity : AppCompatActivity(),
         if(!checkPermissions())
             requestPermissions()
 
+        // Задаем функцию перехода для иконки добавления новой заметки
         val button : FloatingActionButton = findViewById(R.id.floatingActionButton)
         button.setOnClickListener{ v: View? ->
+            // Переходим к activity для добавления новой заметки
             startActivity(Intent(this, CameraActivity::class.java))
         }
 
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity(),
                 .commit()
     }
 
+    // Маршрутизация. Переходим к просмотру отдельной заметки
     override fun onListClick(id : Long) {
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity(),
             .commit()
     }
 
+    // Маршрутизация. Переходим к редактированию отдельной заметки
     override fun onEditButtonClick(id: Long) {
         startActivity(Intent(this, EditNoteActivity::class.java).apply
         {
@@ -59,6 +63,7 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
+    // Запускаем функцию Share
     override fun onShareButtonClick(intent: Intent) {
         startActivity(intent)
     }

@@ -9,6 +9,7 @@ import java.lang.Exception
 
 /*
     Паттерн Адаптер. Приспосабливаем INoteDAO под наши нужды
+    Класс для работы с базой данных SQLLite
  */
 class RoomNoteRepository (val context : Context) : INoteRepository {
 
@@ -76,9 +77,5 @@ class RoomNoteRepository (val context : Context) : INoteRepository {
             Log.e("RoomNoteRepository", exc.message)
             false
         }
-    }
-
-    override fun registerLifecycle(lifecycle: Lifecycle) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
