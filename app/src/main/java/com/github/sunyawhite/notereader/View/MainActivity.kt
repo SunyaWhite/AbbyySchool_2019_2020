@@ -8,8 +8,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.github.sunyawhite.notereader.R
+import com.github.sunyawhite.notereader.View.Fragments.DisplayNoteFragment
+import com.github.sunyawhite.notereader.View.Fragments.NoteRecycleView.NoteFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity(),
     NoteFragment.OnListFragmentInteractionListener{
@@ -25,8 +26,10 @@ class MainActivity : AppCompatActivity(),
         if(!checkPermissions())
             requestPermissions()
 
+        // Задаем функцию перехода для иконки добавления новой заметки
         val button : FloatingActionButton = findViewById(R.id.floatingActionButton)
         button.setOnClickListener{ v: View? ->
+            // Переходим к activity для добавления новой заметки
             startActivity(Intent(this, CameraActivity::class.java))
         }
 
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity(),
                 .commit()
     }
 
+    // Маршрутизация. Переходим к просмотру отдельной заметки
     override fun onListClick(id : Long) {
         if(supportFragmentManager.findFragmentByTag(DisplayNoteFragment.TAG) != null)
             supportFragmentManager.popBackStack()
@@ -49,6 +53,19 @@ class MainActivity : AppCompatActivity(),
             .replace(R.id.mainHelperFragment, DisplayNoteFragment.newInstance(id), DisplayNoteFragment.TAG)
             .addToBackStack(null)
             .commit()
+    }
+
+    // Маршрутизация. Переходим к редактированию отдельной заметки
+    override fun onEditButtonClick(id: Long) {
+        startActivity(Intent(this, EditNoteActivity::class.java).apply
+        {
+            putExtra(EditNoteActivity.TAG, id)
+        })
+    }
+
+    // Запускаем функцию Share
+    override fun onShareButtonClick(intent: Intent) {
+        startActivity(intent)
     }
 
     private fun checkPermissions() = REQUIRED_PERMISSIONS.all { permission ->

@@ -9,6 +9,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Подрубаем Koin, дабы можно было использовать DI
         startKoin {
             androidContext(this@MainApplication)
             modules(listOf(repositoryModule)) }

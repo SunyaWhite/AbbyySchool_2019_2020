@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "387294570068",
+    "firebase_url": "https://notereader-6597f.firebaseio.com",
+    "project_id": "notereader-6597f",
+    "storage_bucket": "notereader-6597f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387294570068:android:73e1c0d78c7bd9b6522fc1",
+        "android_client_info": {
+          "package_name": "com.github.sunyawhite.notereader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387294570068-qjifub3nnh20hjued3tigri5vjqtq2f1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.sunyawhite.notereader",
+            "certificate_hash": "6b3d591796b46d67d5fd60d50682e977c8051344"
+          }
+        },
+        {
+          "client_id": "387294570068-6kdvda34a6c9ktk3rfn4imkvtcij87i3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByKr1U02hfKuMx4c0W6IK69_CVZhPCyFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387294570068-6kdvda34a6c9ktk3rfn4imkvtcij87i3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

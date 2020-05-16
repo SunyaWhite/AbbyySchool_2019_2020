@@ -5,7 +5,7 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
 
-// Сущность заметки. Используется для работы с базой данных
+// Сущность заметки. Используется для работы с базой данных Realm
 @RealmClass
 internal open class NoteRealm (
     @PrimaryKey

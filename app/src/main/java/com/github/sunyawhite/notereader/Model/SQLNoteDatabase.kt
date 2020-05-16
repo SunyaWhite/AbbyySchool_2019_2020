@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+// Создаем контекст для SQLLite БД. Подключаемся к базе данных
 @Database(entities = arrayOf(RoomNote::class), version = 2, exportSchema = false)
 abstract class SQLNoteDatabase : RoomDatabase(){
 

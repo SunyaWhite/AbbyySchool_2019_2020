@@ -42,17 +42,13 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     private lateinit var cameraExecutor : ExecutorService
 
-    private var currentPhotoPath : String = ""
-
     private lateinit var imageView : CameraView
 
     private lateinit var cameraButton : Button
 
-    // Note repository to deal with notes
+    // Классы получаемые через DI
     private val repository : INoteRepository = get()
     private val analyzer : ITextRecognition = get()
-
-    //private var job : Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +65,6 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
     }
 
     private fun startCamera(){
-
-        //CameraX.unbindAll()
         imageView.captureMode = CameraView.CaptureMode.IMAGE
         imageView.bindToLifecycle(this)
 
@@ -80,20 +74,25 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
 
     }
 
+    // Создаем файлики для фото
     private fun generateFile() : File = File(externalMediaDirs.first().absolutePath, "${System.currentTimeMillis().toString()}.jpg")
 
-    private suspend fun analyzeImageText(path : String): String = withContext(Dispatchers.IO){
+    // Распознаем текст на фоточке
+    private suspend fun analyzeImageText(path : String): String = withContext(Dispatchers.Default){
         analyzer.RecognizeText(path)
     }
 
+    // Сохраняем заметку
     private suspend fun saveNewNote(text : String, path : String) = withContext(Dispatchers.IO){
         repository.addNewNote(Note(repository.getNewId(), Date(System.currentTimeMillis()), text, path))
     }
 
+    // Проверка разрешений
     private fun checkPermissions() = REQUIRED_PERMISSIONS.all { permission ->
         ActivityCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
     }
 
+    // Требуем разрешения
     private fun requestPermissions(){
         ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSION_REQUEST_CODE)
     }
@@ -106,8 +105,10 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
         when(requestCode){
             PERMISSION_REQUEST_CODE -> {
                 if(grantResults.isNotEmpty() && checkPermissions())
+                    // Все ок! Запускаем камеру
                     startCamera()
                 else{
+                    // Все не ок
                     Toast.makeText(this,"Permission are not granted", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -119,7 +120,7 @@ class CameraActivity : AppCompatActivity(), ImageCapture.OnImageSavedListener {
     override fun onImageSaved(file: File) {
         runBlocking(Dispatchers.Main) {
             Log.d("CameraActivity", "Image taken. Path : ${file.path}")
-            var text = analyzeImageText("file://" + file.path)
+            val text = analyzeImageText("file://" + file.path)
             saveNewNote(text, "file://" + file.path)
             super.onBackPressed()
         }

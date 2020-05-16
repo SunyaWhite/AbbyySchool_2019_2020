@@ -3,6 +3,8 @@ package com.github.sunyawhite.notereader.Model
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 
+
+
 interface INoteRepository : LifecycleObserver {
 
     suspend fun getNewId() : Long
@@ -17,6 +19,5 @@ interface INoteRepository : LifecycleObserver {
 
     suspend fun containsNoteById(id : Long) : Boolean
 
-    fun registerLifecycle(lifecycle: Lifecycle)
-
+    suspend fun updateNote(note : Note) : Boolean
 }

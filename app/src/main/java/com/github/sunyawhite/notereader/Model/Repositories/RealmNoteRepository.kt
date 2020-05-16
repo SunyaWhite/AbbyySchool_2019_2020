@@ -16,7 +16,7 @@ import java.lang.Exception
 import java.util.*
 import kotlin.random.Random
 
-// Class to
+// Класс для работы с базой данных Realm
 class RealmNoteRepository (val context : Context) : INoteRepository {
 
     // Database context
@@ -75,9 +75,8 @@ class RealmNoteRepository (val context : Context) : INoteRepository {
         realm.where<NoteRealm>().equalTo("Id", id).count() > 0
     }
 
-    // Lifecycle observer
-    override fun registerLifecycle(lifecycle: Lifecycle) {
-        registerLifecycle(lifecycle)
+    override suspend fun updateNote(note: Note): Boolean {
+        TODO("Not yet implemented")
     }
 
     // Метод для добавления данных в базу данных. Вызывается только внутри функция данного класса
@@ -94,24 +93,5 @@ class RealmNoteRepository (val context : Context) : INoteRepository {
             false
         }
     }
-
-    /*private fun generateSampleData() {
-
-        if(realm.where<NoteRealm>().count() != 0L)
-            return
-
-        context.assets.open("notes.txt")
-            .bufferedReader()
-            .readText().split("\n\n")
-            .fold(0L) { acc, s ->
-                if(s == "")
-                    acc
-                this.addNewNote(NoteRealm(acc, generateRandomDate(), s, ))
-                acc + 1
-            }
-    }*/
-
-    /*private fun generateRandomDate() : Date =
-        Date(Random.nextInt(2000, 2020), Random.nextInt(1, 13), Random.nextInt(1, 30))*/
 
 }

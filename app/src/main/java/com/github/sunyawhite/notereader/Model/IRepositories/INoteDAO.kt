@@ -2,6 +2,7 @@ package com.github.sunyawhite.notereader.Model
 
 import androidx.room.*
 
+// Запросики - мутации
 @Dao
 interface INoteDAO {
 
@@ -13,6 +14,9 @@ interface INoteDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNote(note : RoomNote)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateNote(note : RoomNote)
 
     @Delete
     suspend fun deleteNote(note : RoomNote)
